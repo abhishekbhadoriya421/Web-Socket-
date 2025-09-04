@@ -6,11 +6,30 @@
 
 <body>
     <h1>Chat Karo</h1>
+    <div>
+        <input type="text" id="inputbox" />
+        <button id="submitbtn">Submit</button>
+    </div>
+    <div id="mgsRecived"></div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        console.log('helo');
+        let div = document.getElementById('mgsRecived');
+        const inputbox = document.getElementById('inputbox');
+        const submitbtn = document.getElementById('submitbtn');
+        /**
+         *  Send Message
+         * */
+        submitbtn.addEventListener('click', (event) => {
+            var message = inputbox.value
+            inputbox.value = "";
+            console.log(message);
+            socket.emit('patra', message);
+        });
+
         const socket = io();
-        socket.emit('connecting', "hello");
+        socket.on('jawab', (msg) => {
+            div.innerHTML += `<h2>${msg}</h2>`
+        });
     </script>
 
 </body>

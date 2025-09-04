@@ -16,7 +16,10 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     console.log("New User Connected");
 
-
+    socket.on('patra', (message) => {
+        console.log(`User Has sent ${message}`);
+        io.emit('jawab', "jawab: " + message);
+    })
     socket.on('disconnect', () => {
         console.log("User Has disconnected")
     });
