@@ -25,15 +25,15 @@
         const chatBox = document.getElementById('chatBox');
         const saveUser = document.getElementById('saveUser');
 
-        let socket = null;
         /**
          *  Send Message
         */
+        let socket = null;
         saveUser.addEventListener('click', (event) => {
             if (username.value.length > 5) {
-                var socket = new WebSocket('ws://localhost:8080')
-
+                socket = new WebSocket('ws://localhost:8080');
                 socket.onopen = () => {
+                    console.log(Date.now());
                     console.log("Connection Stalished");
                     socket.send(username.value);
                     username.value = '';
@@ -42,7 +42,7 @@
                 }
 
                 socket.onmessage = (event) => {
-                    div.innerHTML += `<h2>${event.data}</h2>`; s
+                    div.innerHTML += `<h2>${event.data}</h2>`;
                 }
             } else {
                 alert("User name must be greater than 5 charater");
@@ -53,6 +53,7 @@
 
         submitbtn.addEventListener('click', (event) => {
             let message = inputbox.value
+            console.log(message)
             socket.send(message);
             inputbox.value = "";
         });
