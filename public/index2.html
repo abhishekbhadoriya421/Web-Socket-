@@ -1,0 +1,66 @@
+<html>
+
+<head>
+
+</head>
+
+<body>
+    <h1>Baat Karo</h1>
+    <div id="userConfig">
+        <input type="text" id="username" />
+        <button id="saveUser">Username</button>
+    </div>
+    <div id="chatBox" style="display:none">
+        <input type="text" id="inputbox" />
+        <button id="submitbtn">Submit</button>
+    </div>
+    <div id="mgsRecived"></div>
+    <script>
+        let div = document.getElementById('mgsRecived');
+
+        const inputbox = document.getElementById('inputbox');
+        const submitbtn = document.getElementById('submitbtn');
+        const userConfig = document.getElementById('userConfig');
+        const username = document.getElementById('username');
+        const chatBox = document.getElementById('chatBox');
+        const saveUser = document.getElementById('saveUser');
+
+        let socket = null;
+        /**
+         *  Send Message
+        */
+        saveUser.addEventListener('click', (event) => {
+            if (username.value.length > 5) {
+                var socket = new WebSocket('ws://localhost:8080')
+
+                socket.onopen = () => {
+                    console.log("Connection Stalished");
+                    socket.send(username.value);
+                    username.value = '';
+                    chatBox.style.display = 'block';
+                    userConfig.style.display = 'none';
+                }
+
+                socket.onmessage = (event) => {
+                    div.innerHTML += `<h2>${event.data}</h2>`; s
+                }
+            } else {
+                alert("User name must be greater than 5 charater");
+                username.value = ''
+            }
+
+        });
+
+        submitbtn.addEventListener('click', (event) => {
+            let message = inputbox.value
+            socket.send(message);
+            inputbox.value = "";
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>
