@@ -12,6 +12,28 @@ app.get('/', (req, res) => {
 });
 
 
+function generateAcceptValue(key) {
+    return crypto
+        .createHash("sha1")
+        .update(key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11", "binary")
+        .digest("base64");
+}
+
+server.on("upgrade", (req, socket, head) => {
+    const key = req.headers['sec-websocket-key'];
+    console.log(key);
+    const acceptKey = generateAcceptValue(key);
+    console.log(acceptKey);
+
+    const headers = [
+        'HTTP/1.1 101 Switching Protocols',
+        'Upgrade : websocket',
+        'Connection : Upgrade',
+        `Sec-WebSocket-Accept: ${acceptKey}`,
+    ];
+});
+
+
 
 server.listen(8080, () => {
     console.log('server 2 is running');
