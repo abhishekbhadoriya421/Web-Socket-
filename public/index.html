@@ -5,8 +5,12 @@
 </head>
 
 <body>
-    <h1>Chat Karo</h1>
-    <div>
+    <h1>Baat Karo</h1>
+    <div id="userConfig">
+        <input type="text" id="username" />
+        <button id="saveUser">Username</button>
+    </div>
+    <div id="chatBox" style="display:none">
         <input type="text" id="inputbox" />
         <button id="submitbtn">Submit</button>
     </div>
@@ -14,22 +18,48 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         let div = document.getElementById('mgsRecived');
+
         const inputbox = document.getElementById('inputbox');
         const submitbtn = document.getElementById('submitbtn');
+        const userConfig = document.getElementById('userConfig');
+        const username = document.getElementById('username');
+        const chatBox = document.getElementById('chatBox');
+        const saveUser = document.getElementById('saveUser');
+
+        let socket = null;
         /**
          *  Send Message
-         * */
+        */
+        saveUser.addEventListener('click', (event) => {
+            if (username.value.length > 5) {
+                socket = io({
+                    auth: {
+                        username: username.value
+                    }
+                });
+                console.log("connection has been Stablished:");
+                username.value = ''
+                chatBox.style.display = 'block';
+                userConfig.style.display = 'none';
+
+                socket.on('jawab', (msg) => {
+                    div.innerHTML += `<h2>${msg}</h2>`
+                });
+            } else {
+                alert("User name must be greater than 5 charater");
+                username.value = ''
+            }
+
+        });
+
         submitbtn.addEventListener('click', (event) => {
             var message = inputbox.value
             inputbox.value = "";
-            console.log(message);
             socket.emit('patra', message);
         });
 
-        const socket = io();
-        socket.on('jawab', (msg) => {
-            div.innerHTML += `<h2>${msg}</h2>`
-        });
+
+
     </script>
 
 </body>

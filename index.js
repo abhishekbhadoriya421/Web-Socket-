@@ -14,11 +14,10 @@ app.get('/', (req, res) => {
 })
 
 io.on('connection', (socket) => {
-    console.log("New User Connected");
+    console.log("New User Connected: " + socket.handshake.auth.username);
 
     socket.on('patra', (message) => {
-        console.log(`User Has sent ${message}`);
-        io.emit('jawab', "jawab: " + message);
+        io.emit('jawab', `${socket.handshake.auth.username}: ` + message);
     })
     socket.on('disconnect', () => {
         console.log("User Has disconnected")
