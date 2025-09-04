@@ -19,18 +19,21 @@ function generateAcceptValue(key) {
         .digest("base64");
 }
 
+let clients = [];
+
 server.on("upgrade", (req, socket, head) => {
+    console.log(req.headers);
     const key = req.headers['sec-websocket-key'];
-    console.log(key);
     const acceptKey = generateAcceptValue(key);
-    console.log(acceptKey);
 
     const headers = [
         'HTTP/1.1 101 Switching Protocols',
-        'Upgrade : websocket',
-        'Connection : Upgrade',
+        'Upgrade: websocket',
+        'Connection: Upgrade',
         `Sec-WebSocket-Accept: ${acceptKey}`,
     ];
+
+    socket.write(headers.join('\r\n') + "\r\n\r\n");
 });
 
 
