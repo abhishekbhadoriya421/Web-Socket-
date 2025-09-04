@@ -10,7 +10,7 @@
     <script>
         console.log('helo');
         const socket = io();
-        io.emmit('connecting', "hello");
+        socket.emit('connecting', "hello");
     </script>
 
 </body>

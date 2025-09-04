@@ -3,25 +3,26 @@ const app = express();
 const port = 8080;
 const http = require('http');
 const path = require('path');
-const socket = require('socket.io');
+const { Server } = require('socket.io');
 
-const Server = http.createServer(app);
+const server = http.createServer(app);
 
-const io = socket(Server);
+const io = new Server(server);
 
 app.get('/', (req, res) => {
     return res.sendFile(path.join(__dirname + '/public/index.html'));
 })
 
-io.on('connecting', (socket) => {
+io.on('connection', (socket) => {
     console.log("New User Connected");
+
 
     socket.on('disconnect', () => {
         console.log("User Has disconnected")
     });
 });
 
-Server.listen(port, (err) => {
+server.listen(port, (err) => {
     console.log(`Listening on port ${port}`);
 })
 
